@@ -21,9 +21,9 @@ while True:
     for(x,y,w,h) in faces:
         cv2.rectangle(img, (x,y), (x+w, y+h), (0,255,0),2)
     
-    img = cv2.resize(img, (960,740))
+    img2 = cv2.resize(img, (960,740))
 
-    cv2.imshow('img', img)
+    cv2.imshow('img', img2)
     k = cv2.waitKey(30) & 0xFF
 
     out.write(img)
@@ -34,3 +34,4 @@ while True:
 cap.release()
 out.release()
 cv2.destroyAllWindows
+
