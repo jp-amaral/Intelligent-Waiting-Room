@@ -67,7 +67,7 @@ def getHR():
     tmpIntens = sig.detrend(applyFF(intensities, fs))
     freqs, pows = signal.welch(tmpIntens, fs=fs, nperseg=256)
     bpm = round(freqs[np.argmax(pows)] * 60, 2)
-    if(bpm > 50 and bpm < 150):
+    if(bpm > 50 and bpm < 150 or bpm == 0):
         print("output BPM: ", bpm, fs)
     return bpm
 
@@ -78,6 +78,11 @@ cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
 
 def readIntensity(intensities, curFrame, cropBoxBounds):
     now = 0
+
+    fixedX1 = 115
+    fixedY1 = 80
+    fixedX2 = 155
+    fixedY2 = 100
 
     eyeleft = 0
     headTop = 0
@@ -92,30 +97,33 @@ def readIntensity(intensities, curFrame, cropBoxBounds):
 
         # tmp = getFaceXYHWAndEyeXYHW(frame) # Haar outputs [x, y, w, h] format
         face = getFace(frame)
-        if face is not None:
+        if face is not None or face is None:
         # if tmp != None:
             # face, eye1, eye2 = tmp
             # eyeleft, headTop, eyeright, eyeTop\
             # tmpHeadbox = getHeadbox(face, eye1, eye2)
-            tmpHeadbox = getHeadboxFromHead(face)
-            
-            a = .4
-            eyeleft = int(tmpHeadbox[0]*a + (1-a)*eyeleft)
-            headTop = int(tmpHeadbox[1]*a + (1-a)*headTop)
-            eyeright = int(tmpHeadbox[2]*a + (1-a)*eyeright)
-            eyeTop = int(tmpHeadbox[3]*a + (1-a)*eyeTop)
 
-            offsetY = (tmpHeadbox[2]-tmpHeadbox[0])
-            x1=tmpHeadbox[0]+5
-            x2=tmpHeadbox[2]-5
-            y1=tmpHeadbox[1]-offsetY
-            y2=tmpHeadbox[3]-offsetY-30
+            #testing
+            # tmpHeadbox = getHeadboxFromHead(face)
+            
+            # a = .4
+            # eyeleft = int(tmpHeadbox[0]*a + (1-a)*eyeleft)
+            # headTop = int(tmpHeadbox[1]*a + (1-a)*headTop)
+            # eyeright = int(tmpHeadbox[2]*a + (1-a)*eyeright)
+            # eyeTop = int(tmpHeadbox[3]*a + (1-a)*eyeTop)
+
+            # offsetY = (tmpHeadbox[2]-tmpHeadbox[0])
+            # x1=tmpHeadbox[0]+5
+            # x2=tmpHeadbox[2]-5
+            # y1=tmpHeadbox[1]-offsetY
+            # y2=tmpHeadbox[3]-offsetY-30
             
             #headTOP = y1, eyeTop = y2, eyeLeft = x1, eyeright =x2
 
 
             #ROI = frame[headTop:eyeTop, eyeleft:eyeright, 1]
-            ROI = frame[y1:y2, x1:x2, 1]
+            #ZONA ONDE VAI SELECIONAR A AREA PARA ANALISAR A INTENSIDADE DOS PIXEIS
+            ROI = frame[fixedY1:fixedY2, fixedX1:fixedX2, 1]
             intensity = ROI.mean()
             # intensity = np.median(ROI) # works, but quite chunky.
 
@@ -124,10 +132,10 @@ def readIntensity(intensities, curFrame, cropBoxBounds):
             # Draw the forehead box:
             # curFrame[0] = cv2.rectangle(frame, (eyeleft, headTop),
             #                             (eyeright, eyeTop), (0, 255, 0), 1)
-            cropBoxBounds[0] = [y1 + 2, y2 - 2, x1 + 2, x2 - 2]
+            cropBoxBounds[0] = [fixedY1 + 2, fixedY2 - 2, fixedX1 + 2, fixedX2 - 2]
 
 
-            curFrame[0] = cv2.rectangle(frame, ( x1 , y1), ( x2 , y2) , (0,0,255), 1)
+            curFrame[0] = cv2.rectangle(frame, ( fixedX1 , fixedY1), ( fixedX2 , fixedY2) , (0,0,255), 1)
 
             if (len(intensities) > dataLen):
                 intensities.pop(0)
