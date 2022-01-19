@@ -22,40 +22,6 @@ def applyFF(data, sampleFreq):
     else:
         return data
 
-def getFaceXYHWAndEyeXYHW(im):
-    gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-
-    # Only take one face, the first
-    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-    if len(faces) < 1:
-        return None
-    (x, y, w, h) = faces[0]
-
-    # Crop out faces and detect eyes in that window.
-    roi_gray = gray[y:y + h, x:x + w]
-    eyes, numDetects = eye_cascade.detectMultiScale2(roi_gray, minNeighbors=10)
-    if len(numDetects) < 2:
-        return None
-
-    # Change eye coords to be in image coordinates instead of face coordinates
-    eyes[0][0] += x
-    eyes[1][0] += x
-    eyes[0][1] += y
-    eyes[1][1] += y
-
-    return [faces[0], eyes[0], eyes[1]]
-
-def getFace(im):
-    gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-
-    # Only take one face, the first
-    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-    if len(faces) < 1:
-        return None
-
-    return faces[0]
-
-
 dataLen = 120
 camTimes = [0]*dataLen
 intensities = []
@@ -71,10 +37,7 @@ def getHR():
         print("output BPM: ", bpm, fs)
     return bpm
 
-def getHeadboxFromHead(face):
-    return face[0] + face[2] // 4, face[1] + face[3] // 2, face[0] + 3 * face[2] // 4, face[1] + face[3] // 2 + 50
-
-cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(0)
 
 def readIntensity(intensities, curFrame, cropBoxBounds):
     now = 0
@@ -83,11 +46,6 @@ def readIntensity(intensities, curFrame, cropBoxBounds):
     fixedY1 = 80
     fixedX2 = 155
     fixedY2 = 100
-
-    eyeleft = 0
-    headTop = 0
-    eyeright = 0
-    eyeTop = 0
     while True:
 
         ret, frame = cap.read()
@@ -95,54 +53,26 @@ def readIntensity(intensities, curFrame, cropBoxBounds):
         scaleFactor = 0.4
         frame = cv2.resize(frame,(-1,-1), fx=scaleFactor, fy=scaleFactor)
 
-        # tmp = getFaceXYHWAndEyeXYHW(frame) # Haar outputs [x, y, w, h] format
-        face = getFace(frame)
-        if face is not None or face is None:
-        # if tmp != None:
-            # face, eye1, eye2 = tmp
-            # eyeleft, headTop, eyeright, eyeTop\
-            # tmpHeadbox = getHeadbox(face, eye1, eye2)
+        ROI = frame[fixedY1:fixedY2, fixedX1:fixedX2, 1]
+        intensity = ROI.mean()
+        # intensity = np.median(ROI) # works, but quite chunky.
 
-            #testing
-            # tmpHeadbox = getHeadboxFromHead(face)
-            
-            # a = .4
-            # eyeleft = int(tmpHeadbox[0]*a + (1-a)*eyeleft)
-            # headTop = int(tmpHeadbox[1]*a + (1-a)*headTop)
-            # eyeright = int(tmpHeadbox[2]*a + (1-a)*eyeright)
-            # eyeTop = int(tmpHeadbox[3]*a + (1-a)*eyeTop)
+        intensities.append(intensity)
 
-            # offsetY = (tmpHeadbox[2]-tmpHeadbox[0])
-            # x1=tmpHeadbox[0]+5
-            # x2=tmpHeadbox[2]-5
-            # y1=tmpHeadbox[1]-offsetY
-            # y2=tmpHeadbox[3]-offsetY-30
-            
-            #headTOP = y1, eyeTop = y2, eyeLeft = x1, eyeright =x2
+        # Draw the forehead box:
+        # curFrame[0] = cv2.rectangle(frame, (eyeleft, headTop),
+        #                             (eyeright, eyeTop), (0, 255, 0), 1)
+        cropBoxBounds[0] = [fixedY1 + 2, fixedY2 - 2, fixedX1 + 2, fixedX2 - 2]
 
 
-            #ROI = frame[headTop:eyeTop, eyeleft:eyeright, 1]
-            #ZONA ONDE VAI SELECIONAR A AREA PARA ANALISAR A INTENSIDADE DOS PIXEIS
-            ROI = frame[fixedY1:fixedY2, fixedX1:fixedX2, 1]
-            intensity = ROI.mean()
-            # intensity = np.median(ROI) # works, but quite chunky.
+        curFrame[0] = cv2.rectangle(frame, ( fixedX1 , fixedY1), ( fixedX2 , fixedY2) , (0,0,255), 1)
 
-            intensities.append(intensity)
+        if (len(intensities) > dataLen):
+            intensities.pop(0)
 
-            # Draw the forehead box:
-            # curFrame[0] = cv2.rectangle(frame, (eyeleft, headTop),
-            #                             (eyeright, eyeTop), (0, 255, 0), 1)
-            cropBoxBounds[0] = [fixedY1 + 2, fixedY2 - 2, fixedX1 + 2, fixedX2 - 2]
-
-
-            curFrame[0] = cv2.rectangle(frame, ( fixedX1 , fixedY1), ( fixedX2 , fixedY2) , (0,0,255), 1)
-
-            if (len(intensities) > dataLen):
-                intensities.pop(0)
-
-            camTimes.append(time.time() - now)
-            now = time.time()
-            camTimes.pop(0)
+        camTimes.append(time.time() - now)
+        now = time.time()
+        camTimes.pop(0)
 
 cropBoxBounds = [0]
 curFrame = [0]
