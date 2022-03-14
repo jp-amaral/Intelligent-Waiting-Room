@@ -1,7 +1,3 @@
-#Created by MediaPipe
-#Modified by Augmented Startups 2021
-#Pose-Estimation in 5 Minutes
-#Watch 5 Minute Tutorial at www.augmentedstartups.info/YouTube
 import cv2
 import mediapipe as mp
 import time
@@ -59,5 +55,3 @@ with mp_pose.Pose(
     if cv2.waitKey(5) & 0xFF == 27:
       break
 cap.release()
-# Learn more AI in Computer Vision by Enrolling in our AI_CV Nano Degree:
-# https://bit.ly/AugmentedAICVPRO
