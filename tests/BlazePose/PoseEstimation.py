@@ -1,7 +1,3 @@
-#Created by MediaPipe
-#Modified by Augmented Startups 2021
-#Pose-Estimation in 5 Minutes
-#Watch 5 Minute Tutorial at www.augmentedstartups.info/YouTube
 import cv2
 import mediapipe as mp
 import time
@@ -10,7 +6,11 @@ mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 mp_holistic = mp.solutions.holistic
 
+<<<<<<< HEAD
 # # For static images:
+=======
+# For static images:
+>>>>>>> e3776e03f923ae2767d9f15d1dd36eca077d4049
 # with mp_pose.Pose(
 #     static_image_mode=True,
 #     model_complexity=2,
@@ -59,5 +59,3 @@ with mp_pose.Pose(
     if cv2.waitKey(5) & 0xFF == 27:
       break
 cap.release()
-# Learn more AI in Computer Vision by Enrolling in our AI_CV Nano Degree:
-# https://bit.ly/AugmentedAICVPRO
