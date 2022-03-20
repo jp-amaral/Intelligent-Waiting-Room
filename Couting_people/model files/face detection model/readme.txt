@@ -1,1 +1,0 @@
-This model can detect face in any frame or person image.
