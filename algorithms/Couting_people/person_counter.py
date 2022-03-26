@@ -65,6 +65,15 @@ def non_max_suppression_fast(boxes, overlapThresh):
 def main():
     #cap = cv2.VideoCapture('testvideo2.mp4')
     cap = cv2.VideoCapture(0)
+    # Webcam Parameters
+    realWidth = 160
+    realHeight = 120
+    videoWidth = 640
+    videoHeight = 512
+    videoChannels = 3
+    videoFrameRate = 15
+    cap.set(3, realWidth)
+    cap.set(4, realHeight)
 
     fps_start_time = datetime.datetime.now()
     fps = 0
@@ -72,7 +81,6 @@ def main():
 
     while True:
         ret, frame = cap.read()
-        frame = imutils.resize(frame, width=600)
         total_frames = total_frames + 1
 
         (H, W) = frame.shape[:2]
@@ -136,7 +144,7 @@ def main():
         fps_text = "FPS: {:.2f}".format(fps)
         counter_text = "{}".format(len(objects))
         cv2.putText(frame, fps_text, (5, 30), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255), 1)
-        cv2.putText(frame, counter_text, (10, 300), cv2.FONT_HERSHEY_COMPLEX_SMALL, 4, (255, 0, 0), 5)
+        cv2.putText(frame, counter_text, (5, 60), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255, 0, 0), 1)
 
         cv2.imshow("Application", frame)
         key = cv2.waitKey(1)

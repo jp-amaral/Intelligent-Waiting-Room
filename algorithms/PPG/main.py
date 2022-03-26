@@ -6,6 +6,7 @@ December 2018
 
 import numpy as np
 import cv2
+import time
 import sys
 
 # Helper Methods
@@ -24,14 +25,14 @@ def reconstructFrame(pyramid, index, levels):
 
 # Webcam Parameters
 webcam = cv2.VideoCapture(0)
-realWidth = 320
-realHeight = 240
-videoWidth = 160
-videoHeight = 120
+realWidth = 1280
+realHeight = 1024
+videoWidth = 640
+videoHeight = 512
 videoChannels = 3
 videoFrameRate = 15
-webcam.set(3, realWidth);
-webcam.set(4, realHeight);
+webcam.set(3, realWidth)
+webcam.set(4, realHeight)
 
 # Output Videos
 # if len(sys.argv) != 2:
@@ -76,7 +77,7 @@ bpmCalculationFrequency = 15
 bpmBufferIndex = 0
 bpmBufferSize = 10
 bpmBuffer = np.zeros((bpmBufferSize))
-
+prevTime = 0
 i = 0
 while (True):
     ret, frame = webcam.read()
@@ -127,6 +128,11 @@ while (True):
         cv2.putText(frame, "Calculating BPM...", loadingTextLocation, font, fontScale, fontColor, lineType)
 
     #outputVideoWriter.write(frame)
+    
+    currTime = time.time()
+    fps = 1 / (currTime - prevTime)
+    prevTime = currTime
+    print(fps)
 
     if len(sys.argv) != 2:
         cv2.imshow("Webcam Heart Rate Monitor", frame)

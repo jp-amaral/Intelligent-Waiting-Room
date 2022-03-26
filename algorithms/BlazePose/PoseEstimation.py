@@ -6,11 +6,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 mp_holistic = mp.solutions.holistic
 
-<<<<<<< HEAD
 # # For static images:
-=======
-# For static images:
->>>>>>> e3776e03f923ae2767d9f15d1dd36eca077d4049
 # with mp_pose.Pose(
 #     static_image_mode=True,
 #     model_complexity=2,
@@ -26,6 +22,14 @@ mp_holistic = mp.solutions.holistic
 
 # For webcam input:
 cap = cv2.VideoCapture(0)
+realWidth = 320
+realHeight = 240
+videoWidth = 160
+videoHeight = 120
+videoChannels = 3
+videoFrameRate = 15
+cap.set(3, realWidth)
+cap.set(4, realHeight)
 #cap = cv2.VideoCapture("1.mp4")
 #For Video input:
 prevTime = 0
@@ -54,7 +58,7 @@ with mp_pose.Pose(
     currTime = time.time()
     fps = 1 / (currTime - prevTime)
     prevTime = currTime
-    cv2.putText(image, f'FPS: {int(fps)}', (20, 35), cv2.FONT_HERSHEY_PLAIN, 1, (0, 196, 255), 1)
+    cv2.putText(image, f'FPS: {(fps)}', (20, 35), cv2.FONT_HERSHEY_PLAIN, 1, (0, 196, 255), 1)
     cv2.imshow('BlazePose', image)
     if cv2.waitKey(5) & 0xFF == 27:
       break
