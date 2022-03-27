@@ -38,7 +38,7 @@ def getHR():
     return bpm
 
 cap = cv2.VideoCapture(0)
-
+print(cap)
 def readIntensity(intensities, curFrame, cropBoxBounds):
     now = 0
 
@@ -46,41 +46,40 @@ def readIntensity(intensities, curFrame, cropBoxBounds):
     fixedY1 = 80
     fixedX2 = 155
     fixedY2 = 100
-    while True:
 
-        ret, frame = cap.read()
+    ret, frame = cap.read()
 
-        scaleFactor = 0.4
-        frame = cv2.resize(frame,(-1,-1), fx=scaleFactor, fy=scaleFactor)
+    scaleFactor = 0.
+    #frame = cv2.resize(frame,(-1,-1), fx=scaleFactor, fy=scaleFactor)
 
-        ROI = frame[fixedY1:fixedY2, fixedX1:fixedX2, 1]
-        intensity = ROI.mean()
+    ROI = frame[fixedY1:fixedY2, fixedX1:fixedX2, 1]
+    intensity = ROI.mean()
         # intensity = np.median(ROI) # works, but quite chunky.
 
-        intensities.append(intensity)
+    intensities.append(intensity)
 
         # Draw the forehead box:
         # curFrame[0] = cv2.rectangle(frame, (eyeleft, headTop),
         #                             (eyeright, eyeTop), (0, 255, 0), 1)
-        cropBoxBounds[0] = [fixedY1 + 2, fixedY2 - 2, fixedX1 + 2, fixedX2 - 2]
+    cropBoxBounds[0] = [fixedY1 + 2, fixedY2 - 2, fixedX1 + 2, fixedX2 - 2]
 
 
-        curFrame[0] = cv2.rectangle(frame, ( fixedX1 , fixedY1), ( fixedX2 , fixedY2) , (0,0,255), 1)
+    curFrame[0] = cv2.rectangle(frame, ( fixedX1 , fixedY1), ( fixedX2 , fixedY2) , (0,0,255), 1)
 
-        if (len(intensities) > dataLen):
-            intensities.pop(0)
+    if (len(intensities) > dataLen):
+        intensities.pop(0)
 
-        camTimes.append(time.time() - now)
-        now = time.time()
-        camTimes.pop(0)
+    camTimes.append(time.time() - now)
+    now = time.time()
+    camTimes.pop(0)
 
 cropBoxBounds = [0]
 curFrame = [0]
-t1 = threading.Thread(target = readIntensity, daemon=True, args=(intensities, curFrame, cropBoxBounds))
-t1.start()
+#t1 = threading.Thread(target = readIntensity, daemon=True, args=(intensities, curFrame, cropBoxBounds))
+#t1.start()
 
-time.sleep(1)
 while True:
+    readIntensity(intensities, curFrame, cropBoxBounds)
     frame = curFrame[0]
     bb = cropBoxBounds[0]
     ROI = frame[bb[0]:bb[1], bb[2]:bb[3], 1]

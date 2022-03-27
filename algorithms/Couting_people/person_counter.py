@@ -145,7 +145,7 @@ def main():
         counter_text = "{}".format(len(objects))
         cv2.putText(frame, fps_text, (5, 30), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255), 1)
         cv2.putText(frame, counter_text, (5, 60), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255, 0, 0), 1)
-
+        cv2.resize(frame, (1000,800), interpolation=cv2.INTER_AREA)
         cv2.imshow("Application", frame)
         key = cv2.waitKey(1)
         if key == ord('q'):

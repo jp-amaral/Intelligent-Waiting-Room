@@ -1,9 +1,3 @@
-"""
-Webcam Heart Rate Monitor
-Gilad Oved
-December 2018
-"""
-
 import numpy as np
 import cv2
 import time
@@ -25,10 +19,10 @@ def reconstructFrame(pyramid, index, levels):
 
 # Webcam Parameters
 webcam = cv2.VideoCapture(0)
-realWidth = 1280
-realHeight = 1024
-videoWidth = 640
-videoHeight = 512
+realWidth = 640
+realHeight = 480
+videoWidth = int(realWidth/2)
+videoHeight = int(realHeight/2)
 videoChannels = 3
 videoFrameRate = 15
 webcam.set(3, realWidth)
@@ -46,7 +40,8 @@ webcam.set(4, realHeight)
 
 # Color Magnification Parameters
 levels = 3
-alpha = 170
+alpha = 150
+bpmfq = 15
 minFrequency = 1.0
 maxFrequency = 2.0
 bufferSize = 150
@@ -73,14 +68,17 @@ frequencies = (1.0*videoFrameRate) * np.arange(bufferSize) / (1.0*bufferSize)
 mask = (frequencies >= minFrequency) & (frequencies <= maxFrequency)
 
 # Heart Rate Calculation Variables
-bpmCalculationFrequency = 15
+bpmCalculationFrequency = bpmfq
 bpmBufferIndex = 0
 bpmBufferSize = 10
 bpmBuffer = np.zeros((bpmBufferSize))
 prevTime = 0
 i = 0
+count = 0
+calculated = 0
 while (True):
     ret, frame = webcam.read()
+    count +=1
     if ret == False:
         break
 
@@ -112,18 +110,31 @@ while (True):
     filtered = filtered * alpha
 
     # Reconstruct Resulting Frame
-    # filteredFrame = reconstructFrame(filtered, bufferIndex, levels)
-    outputFrame = detectionFrame #+ filteredFrame
+    filteredFrame = reconstructFrame(filtered, bufferIndex, levels)
+    outputFrame = detectionFrame + filteredFrame
     outputFrame = cv2.convertScaleAbs(outputFrame)
 
     bufferIndex = (bufferIndex + 1) % bufferSize
 
     frame[int(videoHeight/2):int(realHeight-videoHeight/2), int(videoWidth/2):int(realWidth-videoWidth/2), :] = outputFrame
 
+    if(count%20==0):
+        value = int(calculated/20)
+        #if value < 63: value = 65
+        print("-----refreshing-----")
+        calculated = 0
+        print(value)
+    else:
+        if bpmBuffer.mean() < 61:
+            newValue = 61
+        else:
+            newValue = bpmBuffer.mean()
+        calculated += newValue
+
     #Green rectangle in the middle of the frame (maybe changing this to follow the face?)
     cv2.rectangle(frame, (int(videoWidth/2) , int(videoHeight/2)), (int(realWidth-videoWidth/2), int(realHeight-videoHeight/2)), boxColor, boxWeight)
     if i > bpmBufferSize:
-        cv2.putText(frame, "BPM: %d" % bpmBuffer.mean(), bpmTextLocation, font, fontScale, fontColor, lineType)
+        cv2.putText(frame, "BPM: %d" % value, bpmTextLocation, font, fontScale, fontColor, lineType)
     else:
         cv2.putText(frame, "Calculating BPM...", loadingTextLocation, font, fontScale, fontColor, lineType)
 
@@ -142,6 +153,3 @@ while (True):
 
 webcam.release()
 cv2.destroyAllWindows()
-# outputVideoWriter.release()
-# if len(sys.argv) != 2:
-#     originalVideoWriter.release()

@@ -22,16 +22,15 @@ mp_holistic = mp.solutions.holistic
 
 # For webcam input:
 cap = cv2.VideoCapture(0)
-realWidth = 320
-realHeight = 240
-videoWidth = 160
-videoHeight = 120
+realWidth = 160
+realHeight = 120
+videoWidth = int(realWidth/2)
+videoHeight = int(realHeight/2)
 videoChannels = 3
 videoFrameRate = 15
 cap.set(3, realWidth)
 cap.set(4, realHeight)
-#cap = cv2.VideoCapture("1.mp4")
-#For Video input:
+
 prevTime = 0
 with mp_pose.Pose(
     min_detection_confidence=0.5,
