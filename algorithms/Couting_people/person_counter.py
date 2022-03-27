@@ -66,8 +66,8 @@ def main():
     #cap = cv2.VideoCapture('testvideo2.mp4')
     cap = cv2.VideoCapture(0)
     # Webcam Parameters
-    realWidth = 160
-    realHeight = 120
+    realWidth = 320
+    realHeight = 240
     videoWidth = 640
     videoHeight = 512
     videoChannels = 3
