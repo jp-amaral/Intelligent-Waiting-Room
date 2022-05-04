@@ -132,6 +132,7 @@ def main():
 
         for id, box in centroid_dict.items():
             cv2.rectangle(frame, (box[2], box[3]), (box[4], box[5]), (0, 255, 0), 2)
+            print(f'x:{box[2]} | y:{box[3]} | z:{box[4]} w:{box[5]}')
 
 
         fps_end_time = datetime.datetime.now()
@@ -143,10 +144,12 @@ def main():
 
         fps_text = "FPS: {:.2f}".format(fps)
         counter_text = "{}".format(len(objects))
-        cv2.putText(frame, fps_text, (5, 30), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255), 1)
-        cv2.putText(frame, counter_text, (5, 60), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255, 0, 0), 1)
-        cv2.resize(frame, (1000,800), interpolation=cv2.INTER_AREA)
-        cv2.imshow("Application", frame)
+        # cv2.putText(frame, fps_text, (5, 30), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255), 1)
+        # cv2.putText(frame, counter_text, (5, 200), cv2.FONT_HERSHEY_COMPLEX_SMALL, 5, (255, 0, 0), 5)
+        # cv2.resize(frame, (1000,800), interpolation=cv2.INTER_AREA)
+        # cv2.imshow("Application", frame)
+        print(fps_text)
+        print(counter_text)
         key = cv2.waitKey(1)
         if key == ord('q'):
             break
