@@ -94,10 +94,10 @@ def main():
             confidence = person_detections[0, 0, i, 2]
             if confidence > 0.5:
                 idx = int(person_detections[0, 0, i, 1])
-
+                
                 if CLASSES[idx] != "person":
                     continue
-
+                
                 person_box = person_detections[0, 0, i, 3:7] * np.array([W, H, W, H])
                 (startX, startY, endX, endY) = person_box.astype("int")
                 rects.append(person_box)
@@ -144,10 +144,10 @@ def main():
 
         fps_text = "FPS: {:.2f}".format(fps)
         counter_text = "{}".format(len(objects))
-        # cv2.putText(frame, fps_text, (5, 30), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255), 1)
-        # cv2.putText(frame, counter_text, (5, 200), cv2.FONT_HERSHEY_COMPLEX_SMALL, 5, (255, 0, 0), 5)
-        # cv2.resize(frame, (1000,800), interpolation=cv2.INTER_AREA)
-        # cv2.imshow("Application", frame)
+        cv2.putText(frame, fps_text, (5, 30), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255), 1)
+        cv2.putText(frame, counter_text, (5, 200), cv2.FONT_HERSHEY_COMPLEX_SMALL, 5, (255, 0, 0), 5)
+        #cv2.resize(frame, (1000,800), interpolation=cv2.INTER_AREA)
+        cv2.imshow("Application", frame)
         print(fps_text)
         print(counter_text)
         key = cv2.waitKey(1)
