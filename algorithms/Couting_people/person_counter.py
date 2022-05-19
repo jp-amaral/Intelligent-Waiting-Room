@@ -5,13 +5,23 @@ import numpy as np
 from centroidtracker import CentroidTracker
 from itertools import combinations
 import math
+import threading
+import socket
+import signal
+import sys
+import random
+from threading import *
+import threading
+import pickle
+import time
 
 protopath = "MobileNetSSD_deploy.prototxt"
 modelpath = "MobileNetSSD_deploy.caffemodel"
 detector = cv2.dnn.readNetFromCaffe(prototxt=protopath, caffeModel=modelpath)
 # detector.setPreferableBackend(cv2.dnn.DNN_BACKEND_INFERENCE_ENGINE)
 # detector.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
-
+counter_text = 0
+message = {'num_people': 0, 'positions': {}}
 
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
            "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
@@ -19,7 +29,11 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
            "sofa", "train", "tvmonitor"]
 
 tracker = CentroidTracker(maxDisappeared=40, maxDistance=50)
+ip_addr = "192.168.160.19"
+tcp_port = 5005
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+sock.connect((ip_addr, tcp_port))
 
 def non_max_suppression_fast(boxes, overlapThresh):
     try:
@@ -61,8 +75,9 @@ def non_max_suppression_fast(boxes, overlapThresh):
     except Exception as e:
         print("Exception occurred in non_max_suppression : {}".format(e))
 
-
-def main():
+def peoplecounting():
+    global counter_text
+    global array
     #cap = cv2.VideoCapture('testvideo2.mp4')
     cap = cv2.VideoCapture(0)
     # Webcam Parameters
@@ -121,7 +136,7 @@ def main():
 
             # text = "ID: {}".format(objectId)
             # cv2.putText(frame, text, (x1, y1-5), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255), 1)
-
+# delete message with id
         red_zone_list = []
         for (id1, p1), (id2, p2) in combinations(centroid_dict.items(), 2):
             dx, dy = p1[0] - p2[0], p1[1] - p2[1]
@@ -130,9 +145,17 @@ def main():
             if id2 not in red_zone_list:
                 red_zone_list.append(id2)
 
+        array = centroid_dict.items()
+        aux = {}
+        index = 0
         for id, box in centroid_dict.items():
+            index = index + 1
             cv2.rectangle(frame, (box[2], box[3]), (box[4], box[5]), (0, 255, 0), 2)
-            print(f'x:{box[2]} | y:{box[3]} | z:{box[4]} w:{box[5]}')
+            #print(f'x:{box[2]} | y:{box[3]} | z:{box[4]} w:{box[5]}')
+            # add to message dict box[2] ,box[3], box[4], box[5]
+            datacordenadas = {'x': box[2], 'y': box[3], 'w': box[4], 'h': box[5]}
+            message['positions'][index] = datacordenadas
+
 
 
         fps_end_time = datetime.datetime.now()
@@ -147,14 +170,40 @@ def main():
         # cv2.putText(frame, fps_text, (5, 30), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255), 1)
         # cv2.putText(frame, counter_text, (5, 200), cv2.FONT_HERSHEY_COMPLEX_SMALL, 5, (255, 0, 0), 5)
         # cv2.resize(frame, (1000,800), interpolation=cv2.INTER_AREA)
-        # cv2.imshow("Application", frame)
-        print(fps_text)
-        print(counter_text)
+        cv2.imshow("Application", frame)
+        #print(fps_text)
+        
+        #print(counter_text)
         key = cv2.waitKey(1)
         if key == ord('q'):
             break
 
     cv2.destroyAllWindows()
 
+def signal_handler(sig, frame):
+    print('\nDone!')
+    sys.exit(0)
 
-main()
+def sendmessage():
+    while True:
+        try:
+            message['num_people'] = counter_text
+            pickled_message = pickle.dumps(message)
+            sock.send(pickled_message)
+            message['positions'] = {}
+            print(pickle.loads(pickled_message))
+            time.sleep(1)
+            #print pickled_message decode
+            # response = sock.recv(4096).decode()
+            # print('Server response: {}'.format(response))
+        except (socket.timeout, socket.error):
+            print('Server error. Done!')
+            sys.exit(0)
+
+t1 = threading.Thread(target=peoplecounting)
+
+t2 = threading.Thread(target=sendmessage)
+
+t1.start()
+
+t2.start()
