@@ -1,11 +1,39 @@
 
+
+
 .linha{
   display: flex;
   flex-flow: row wrap;
-  padding:10px;
-  background-color: rgb(1, 9, 24);
+  background-color: #A1B5D8;
+  height: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+.rect{
+  position: relative;
+width: 30vw;
+height: 50vh;
+left: 8vw;
+top: -6vh;
+margin-bottom: -20vh;
+
+
+display: flex;
+justify-content: center;
+/* align-items: center; */
+
+background: #8A9CB4;
+box-shadow: 4px 4px 10px 4px rgba(0, 0, 0, 0.1);
+border-radius: 40px;
 }
 
+.cp{
+  position: absolute;
+  left: 20vw;
+  top: 10vh;
+  top: 1vw;
+  color: #2d333d;
+}
 
 .coluna-50 {
 
@@ -18,16 +46,34 @@
 .coluna-60 {
   width: 20%;
   color: rgb(255, 255, 255);
+  background-color: #333;
+  border-Radius: 10;
+  display: flex;
+  float:right;
+  Height: 30;
+  margin-right: 130;
+  width: 300
 }
 
 .home {
   margin-right: 20ch;
   margin-left: 3ch;
-  width: 70%;
-  height: 90vh;
+  width: 100%;
+  height: 100vh;
   display: inline-flex;
   float: left;
   background-repeat: no-repeat;
   background-size: cover;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.room{
+  position: relative;
+  width: 60vw;
+  height: 73vh;
+  left: 4vw;
+  top: 4vh;
+
+  box-shadow: 4px 4px 10px 4px rgba(0, 0, 0, 0.1);
+border-radius: 40px;
 }
