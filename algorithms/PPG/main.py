@@ -5,14 +5,17 @@ import time
 import sys
 import socket
 import pickle
+import paho.mqtt.client as mqtt
 
-ip_addr = "192.168.160.19"
-tcp_port = 5005
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# --------------------------------------------------------- CONFIG
+broker_address = "192.168.160.19"
+#Client instance
+client = mqtt.Client("ppg-client-pub")
 
-sock.connect((ip_addr, tcp_port))
+client.connect(broker_address, port=1883, keepalive=60)
+# ---------------------------------------------------------
 
-message = {'PPG': 0}
+message = {'value': 0}
 
 # Helper Methods
 def buildGauss(frame, levels):
@@ -136,7 +139,7 @@ def main():
             try:
                 message['PPG'] = str(value)
                 pickled_message = pickle.dumps(message)
-                sock.send(pickled_message)
+                client.publish("ppg", pickled_message)
                 print(pickle.loads(pickled_message))
                 #print pickled_message decode
                 # response = sock.recv(4096).decode()

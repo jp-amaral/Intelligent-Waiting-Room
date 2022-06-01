@@ -1,19 +1,16 @@
 import cv2
 import datetime
-import imutils
 import numpy as np
 from centroidtracker import CentroidTracker
 from itertools import combinations
-import math
 import threading
 import socket
-import signal
 import sys
-import random
 from threading import *
 import threading
 import pickle
 import time
+import paho.mqtt.client as mqtt
 
 protopath = "MobileNetSSD_deploy.prototxt"
 modelpath = "MobileNetSSD_deploy.caffemodel"
@@ -29,11 +26,14 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
            "sofa", "train", "tvmonitor"]
 
 tracker = CentroidTracker(maxDisappeared=40, maxDistance=50)
-ip_addr = "192.168.160.19"
-tcp_port = 5005
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-sock.connect((ip_addr, tcp_port))
+# --------------------------------------------------------- CONFIG
+broker_address = "192.168.160.19"
+#Client instance
+client = mqtt.Client("counter-client-pub")
+
+client.connect(broker_address, port=1883, keepalive=60)
+# ---------------------------------------------------------
 
 def non_max_suppression_fast(boxes, overlapThresh):
     try:
@@ -182,16 +182,12 @@ def peoplecounting():
 
     cv2.destroyAllWindows()
 
-def signal_handler(sig, frame):
-    print('\nDone!')
-    sys.exit(0)
-
 def sendmessage():
     while True:
         try:
             message['num_people'] = counter_text
             pickled_message = pickle.dumps(message)
-            sock.send(pickled_message)
+            client.publish("counter", pickled_message)
             message['positions'] = {}
             print(pickle.loads(pickled_message))
             time.sleep(1)
