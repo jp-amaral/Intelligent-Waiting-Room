@@ -137,7 +137,7 @@ def main():
             #if value < 63: value = 65
             #print("-----refreshing-----")
             try:
-                message['PPG'] = str(value)
+                message['value'] = str(value)
                 pickled_message = pickle.dumps(message)
                 client.publish("ppg", pickled_message)
                 print(pickle.loads(pickled_message))
