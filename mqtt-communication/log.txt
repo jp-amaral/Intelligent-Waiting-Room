@@ -1,0 +1,38 @@
+Sending CONNECT (u0, p0, wr0, wq0, wf0, c1, k60) client_id=b'ppg-client-sub'
+Sending SUBSCRIBE (d0, m1) [(b'ppg/data', 0)]
+Received CONNACK (0, 0)
+Received SUBACK
+Sending CONNECT (u0, p0, wr0, wq0, wf0, c1, k60) client_id=b'ppg-client-sub'
+Received CONNACK (0, 0)
+Sending CONNECT (u0, p0, wr0, wq0, wf0, c1, k60) client_id=b'ppg-client-sub'
+Received CONNACK (0, 0)
+Sending CONNECT (u0, p0, wr0, wq0, wf0, c1, k60) client_id=b'ppg-client-sub'
+Sending SUBSCRIBE (d0, m1) [(b'ppg/data', 0)]
+Received CONNACK (0, 0)
+Received SUBACK
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Sending CONNECT (u0, p0, wr0, wq0, wf0, c1, k60) client_id=b'ppg-client-sub'
+Sending SUBSCRIBE (d0, m1) [(b'ppg/data', 0)]
+Received CONNACK (0, 0)
+Received SUBACK
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (5 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (5 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (4 bytes)
+Received PUBLISH (d0, q0, r0, m0), 'ppg/data', ...  (5 bytes)
