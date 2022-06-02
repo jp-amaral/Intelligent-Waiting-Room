@@ -4,17 +4,28 @@
 .linha{
   display: flex;
   flex-flow: row wrap;
-  background-color: #A1B5D8;
+  background-color: #7089b4;
   height: 100%;
   overflow-y: hidden;
   overflow-x: hidden;
 }
 .rect{
   position: relative;
-width: 30vw;
-height: 50vh;
-left: 8vw;
-top: -6vh;
+width: 60vw;
+height: 12vh;
+left: 140vh;
+top: -55vh;
+
+background: #a0adbe;
+box-shadow: 4px 4px 10px 4px rgba(0, 0, 0, 0.1);
+border-radius: 40px;
+}
+.rect2{
+  position: absolute;
+width: 40vw;
+height: 10vh;
+left: -4vw;
+top: 4vh;
 margin-bottom: -20vh;
 
 
@@ -22,15 +33,42 @@ display: flex;
 justify-content: center;
 /* align-items: center; */
 
-background: #8A9CB4;
+background: #a0adbe;
 box-shadow: 4px 4px 10px 4px rgba(0, 0, 0, 0.1);
 border-radius: 40px;
 }
+.rect3{
+  position: relative;
+  width: 60vw;
+  height: 56vh;
+  left: 140vh;
+  top: -50vh;
+  
+  background: #a0adbe;
+  box-shadow: 4px 4px 10px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 40px;
+}
+.pdr{
+  position: relative;
+font-family: 'Monoton', cursive;
+font-style: normal;
+font-weight: 600;
+font-size: 45px;
+line-height: 48px;
+left: 2vw;
+top: -1vh;
 
+color: #7089b4;
+border: white;
+}
+
+.npd{
+  position: relative;
+}
 .cp{
   position: absolute;
   left: 20vw;
-  top: 10vh;
+  top: 17vh;
   top: 1vw;
   color: #2d333d;
 }
@@ -72,7 +110,7 @@ border-radius: 40px;
   width: 60vw;
   height: 73vh;
   left: 4vw;
-  top: 4vh;
+  top: 18vh;
 
   box-shadow: 4px 4px 10px 4px rgba(0, 0, 0, 0.1);
 border-radius: 40px;
