@@ -4,25 +4,25 @@
 .linha{
   display: flex;
   flex-flow: row wrap;
-  background-color: #7089b4;
+  background-color: #c4c4c4;
   height: 100%;
   overflow-y: hidden;
   overflow-x: hidden;
 }
 .rect{
   position: relative;
-width: 60vw;
+width: 41vw;
 height: 12vh;
-left: 140vh;
+left: 176vh;
 top: -55vh;
 
-background: #a0adbe;
+background: rgb(220, 221, 220);
 box-shadow: 4px 4px 10px 4px rgba(0, 0, 0, 0.1);
 border-radius: 40px;
 }
 .rect2{
   position: absolute;
-width: 40vw;
+width: 30vw;
 height: 10vh;
 left: -4vw;
 top: 4vh;
@@ -33,7 +33,7 @@ display: flex;
 justify-content: center;
 /* align-items: center; */
 
-background: #a0adbe;
+background: rgb(220, 221, 220);
 box-shadow: 4px 4px 10px 4px rgba(0, 0, 0, 0.1);
 border-radius: 40px;
 }
@@ -44,7 +44,7 @@ border-radius: 40px;
   left: 140vh;
   top: -50vh;
   
-  background: #a0adbe;
+ background: rgb(220, 221, 220);
   box-shadow: 4px 4px 10px 4px rgba(0, 0, 0, 0.1);
   border-radius: 40px;
 }
@@ -58,19 +58,23 @@ line-height: 48px;
 left: 2vw;
 top: -1vh;
 
-color: #7089b4;
+color: black;
+
 border: white;
 }
 
 .npd{
-  position: relative;
+  position: absolute;
+  left: 6vh;
+  top: -2.7vw;
+  font-size: 90px;
 }
 .cp{
   position: absolute;
-  left: 20vw;
+  left: 16vw;
   top: 17vh;
   top: 1vw;
-  color: #2d333d;
+  color: rgb(0, 0, 0);
 }
 
 .coluna-50 {
@@ -114,4 +118,15 @@ border: white;
 
   box-shadow: 4px 4px 10px 4px rgba(0, 0, 0, 0.1);
 border-radius: 40px;
+}
+.iconpessoas{
+  position: absolute;
+  left: 1vw;
+  width: 20vw;
+}
+.info{
+  position: absolute;
+  top: -40vh;
+  left: 190vh;
+  cursor: pointer;
 }
