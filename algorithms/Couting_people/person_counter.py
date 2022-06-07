@@ -32,7 +32,7 @@ broker_address = "192.168.160.19"
 #Client instance
 client = mqtt.Client("counter-client-pub")
 
-client.connect(broker_address, port=1883, keepalive=60)
+client.connect(broker_address, port=1883, keepalive=60000)
 # ---------------------------------------------------------
 
 def non_max_suppression_fast(boxes, overlapThresh):
@@ -190,7 +190,7 @@ def sendmessage():
             client.publish("counter", pickled_message)
             message['positions'] = {}
             print(json.loads(pickled_message))
-            time.sleep(1)
+            time.sleep(0.2)
             #print pickled_message decode
             # response = sock.recv(4096).decode()
             # print('Server response: {}'.format(response))
