@@ -8,7 +8,7 @@ import socket
 import sys
 from threading import *
 import threading
-import pickle
+import json
 import time
 import paho.mqtt.client as mqtt
 
@@ -186,10 +186,10 @@ def sendmessage():
     while True:
         try:
             message['num_people'] = counter_text
-            pickled_message = pickle.dumps(message)
+            pickled_message = json.dumps(message)
             client.publish("counter", pickled_message)
             message['positions'] = {}
-            print(pickle.loads(pickled_message))
+            print(json.loads(pickled_message))
             time.sleep(1)
             #print pickled_message decode
             # response = sock.recv(4096).decode()

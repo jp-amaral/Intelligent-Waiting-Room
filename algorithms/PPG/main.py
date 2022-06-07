@@ -4,7 +4,7 @@ import cv2
 import time
 import sys
 import socket
-import pickle
+import json
 import paho.mqtt.client as mqtt
 
 # --------------------------------------------------------- CONFIG
@@ -138,9 +138,9 @@ def main():
             #print("-----refreshing-----")
             try:
                 message['value'] = str(value)
-                pickled_message = pickle.dumps(message)
+                pickled_message = json.dumps(message)
                 client.publish("ppg", pickled_message)
-                print(pickle.loads(pickled_message))
+                print(json.loads(pickled_message))
                 #print pickled_message decode
                 # response = sock.recv(4096).decode()
                 # print('Server response: {}'.format(response))
@@ -161,7 +161,8 @@ def main():
         if i > bpmBufferSize:
             cv2.putText(frame, "BPM: %d" % value, bpmTextLocation, font, fontScale, fontColor, lineType)
         else:
-            cv2.putText(frame, "Calculating BPM...", loadingTextLocation, font, fontScale, fontColor, lineType)
+            pass
+            #cv2.putText(frame, "Calculating BPM...", loadingTextLocation, font, fontScale, fontColor, lineType)
 
         #outputVideoWriter.write(frame)
         
