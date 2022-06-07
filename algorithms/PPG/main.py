@@ -12,7 +12,7 @@ broker_address = "192.168.160.19"
 #Client instance
 client = mqtt.Client("ppg-client-pub")
 
-client.connect(broker_address, port=1883, keepalive=60)
+client.connect(broker_address, port=1883, keepalive=6000)
 # ---------------------------------------------------------
 
 message = {'value': 0}
@@ -157,7 +157,7 @@ def main():
             calculated += newValue
 
         #Green rectangle in the middle of the frame (maybe changing this to follow the face?)
-        cv2.rectangle(frame, bpmTextLocation, (100,20), (0,0,0), -1)
+        #cv2.rectangle(frame, bpmTextLocation, (100,20), (0,0,0), -1)
         if i > bpmBufferSize:
             cv2.putText(frame, "BPM: %d" % value, bpmTextLocation, font, fontScale, fontColor, lineType)
         else:
