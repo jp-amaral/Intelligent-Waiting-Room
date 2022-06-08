@@ -6,19 +6,17 @@ import sys
 import socket
 import json
 import paho.mqtt.client as mqtt
-from threading import *
-import threading
 
 # --------------------------------------------------------- CONFIG
 broker_address = "192.168.160.19"
 #Client instance
 client = mqtt.Client("ppg-client-pub")
 
-client.connect(broker_address, port=1883, keepalive=6000)
+client.connect(broker_address, port=1883, keepalive=60)
 # ---------------------------------------------------------
 
 message = {'value': 0}
-value = 0
+
 # Helper Methods
 def buildGauss(frame, levels):
     pyramid = [frame]
@@ -33,7 +31,6 @@ def reconstructFrame(pyramid, index, levels):
     filteredFrame = filteredFrame[:videoHeight, :videoWidth]
     return filteredFrame
 def main():
-    global value
     # Webcam Parameters
     webcam = cv2.VideoCapture(0)
     realWidth = 640
@@ -139,6 +136,17 @@ def main():
             value = int(calculated/20)
             #if value < 63: value = 65
             #print("-----refreshing-----")
+            try:
+                message['value'] = str(value)
+                pickled_message = json.dumps(message)
+                client.publish("ppg", pickled_message)
+                print(json.loads(pickled_message))
+                #print pickled_message decode
+                # response = sock.recv(4096).decode()
+                # print('Server response: {}'.format(response))
+            except (socket.timeout, socket.error):
+                print('Server error. Done!')
+                sys.exit(0)
             calculated = 0
             #print(value)
         else:
@@ -172,23 +180,5 @@ def main():
     webcam.release()
     cv2.destroyAllWindows()
 
-def sendmessage():
-    while True:
-        try:
-            message['value'] = str(value)
-            pickled_message = json.dumps(message)
-            client.publish("ppg", pickled_message)
-            print(json.loads(pickled_message))
-            # wait 1 s
-            time.sleep(0.2)
-        except (socket.timeout, socket.error):
-            print('Server error. Done!')
-            sys.exit(0)
 
-t1 = threading.Thread(target=main)
-
-t2 = threading.Thread(target=sendmessage)
-
-t1.start()
-
-t2.start()
+main()

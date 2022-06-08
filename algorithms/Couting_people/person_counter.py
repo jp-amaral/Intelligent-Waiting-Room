@@ -32,7 +32,7 @@ broker_address = "192.168.160.19"
 #Client instance
 client = mqtt.Client("counter-client-pub")
 
-client.connect(broker_address, port=1883, keepalive=60000)
+client.connect(broker_address, port=1883, keepalive=60)
 # ---------------------------------------------------------
 
 def non_max_suppression_fast(boxes, overlapThresh):
