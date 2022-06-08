@@ -95,6 +95,7 @@ def peoplecounting():
     total_frames = 0
 
     while True:
+        
         ret, frame = cap.read()
         total_frames = total_frames + 1
 
@@ -165,16 +166,16 @@ def peoplecounting():
         else:
             fps = (total_frames / time_diff.seconds)
 
-        fps_text = "FPS: {:.2f}".format(fps)
+        # fps_text = "FPS: {:.2f}".format(fps)
         counter_text = "{}".format(len(objects))
 
         # cv2.putText(frame, fps_text, (5, 30), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255), 1)
         # cv2.putText(frame, counter_text, (5, 200), cv2.FONT_HERSHEY_COMPLEX_SMALL, 5, (255, 0, 0), 5)
         # cv2.resize(frame, (1000,800), interpolation=cv2.INTER_AREA)
-        try:
-            cv2.imshow("Application", frame)
-        except Exception as e:
-            pass
+        # try:
+        #     cv2.imshow("Application", frame)
+        # except Exception as e:
+        #     pass
         #print(fps_text)
         
         #print(counter_text)
@@ -199,9 +200,6 @@ def sendmessage():
             # print('Server response: {}'.format(response))
         except (socket.timeout, socket.error):
             print('Server error. Done!')
-            message['error'] = 1
-            error_message = json.dumps(message)
-            client.publish("counter",error_message)
             sys.exit(0)
 
 t1 = threading.Thread(target=peoplecounting)
