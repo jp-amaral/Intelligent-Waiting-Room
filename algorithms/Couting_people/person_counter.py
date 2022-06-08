@@ -199,6 +199,9 @@ def sendmessage():
             # print('Server response: {}'.format(response))
         except (socket.timeout, socket.error):
             print('Server error. Done!')
+            message['error'] = 1
+            error_message = json.dumps(message)
+            client.publish("counter",error_message)
             sys.exit(0)
 
 t1 = threading.Thread(target=peoplecounting)
