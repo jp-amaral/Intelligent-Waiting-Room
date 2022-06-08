@@ -14,7 +14,7 @@ client = mqtt.Client("ppg-client-pub")
 
 client.connect(broker_address, port=1883, keepalive=60)
 # ---------------------------------------------------------
-
+face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 message = {'value': 0}
 
 # Helper Methods
@@ -31,6 +31,8 @@ def reconstructFrame(pyramid, index, levels):
     filteredFrame = filteredFrame[:videoHeight, :videoWidth]
     return filteredFrame
 def main():
+    global value
+    face = True
     # Webcam Parameters
     webcam = cv2.VideoCapture(0)
     realWidth = 640
@@ -93,6 +95,13 @@ def main():
     while (True):
         ret, frame = webcam.read()
         count +=1
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+        faces = face_cascade.detectMultiScale(gray,1.15,6)
+        if len(faces) == 0:
+            face = False
+        else:
+            faceCount = 0
         if ret == False:
             break
 
@@ -158,6 +167,9 @@ def main():
 
         #Green rectangle in the middle of the frame (maybe changing this to follow the face?)
         #cv2.rectangle(frame, bpmTextLocation, (100,20), (0,0,0), -1)
+        if not face:
+            value = 0
+            face = True
         if i > bpmBufferSize:
             cv2.putText(frame, "BPM: %d" % value, bpmTextLocation, font, fontScale, fontColor, lineType)
         else:
